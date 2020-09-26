@@ -7,17 +7,18 @@ public class Main {
         int boardSize = 10;
 
         // Create the board
-        Integer[][] board = new Integer[boardSize][boardSize];
+        BoardElement[][] board = new BoardElement[boardSize][boardSize];
 
         // Fill the board with 0
-
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                board[i][j] = 0;
+                board[i][j] = BoardElement.EMPTY;
             }
         }
 
         // Create the snake
+        // TODO: The snake could be represented by a single array of Pair object (x, y).
+        // TODO: The element of the board could be represented by an Enum instead of an int.
         Integer[] snakeX = new Integer[2];
         Integer[] snakeY = new Integer[2];
 
@@ -32,25 +33,26 @@ public class Main {
         snakeX[1] = currentHeadX;
         snakeY[1] = currentHeadY - 1;
 
-        board[snakeX[0]][snakeY[0]] = 1;
-        board[snakeX[1]][snakeY[1]] = 2;
+        board[snakeX[0]][snakeY[0]] = BoardElement.SNAKE_HEAD;
+        board[snakeX[1]][snakeY[1]] = BoardElement.SNAKE_BODY;
 
         String previousMovement = "d";
 
         // Generate random number to put the first food
+        // TODO: The available position could be put in a Set and we make a random on an index of this Set.
         Random random = new Random();
 
         int randomX = random.nextInt(boardSize);
         int randomY = random.nextInt(boardSize);
 
-        while (board[randomX][randomY] != 0) {
+        while (board[randomX][randomY] != BoardElement.EMPTY) {
             randomX = random.nextInt(boardSize);
             randomY = random.nextInt(boardSize);
         }
 
-        board[randomX][randomY] = 3;
+        board[randomX][randomY] = BoardElement.FOOD;
 
-        Map<String, String> inverseMovement = new HashMap<String, String>();
+        Map<String, String> inverseMovement = new HashMap();
         inverseMovement.put("z", "s");
         inverseMovement.put("s", "z");
         inverseMovement.put("q", "d");
@@ -62,18 +64,20 @@ public class Main {
             for (int i = 0; i < boardSize; i++) {
                 for (int j = 0; j < boardSize; j++) {
                     switch (board[i][j]) {
-                        case 0:
+                        case EMPTY:
                             System.out.print("[ ]");
                             break;
-                        case 1:
+                        case SNAKE_HEAD:
                             System.out.print("[*]");
                             break;
-                        case 2:
+                        case SNAKE_BODY:
                             System.out.print("[o]");
                             break;
-                        case 3:
+                        case FOOD:
                             System.out.print("[#]");
                             break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + board[i][j]);
                     }
                 }
                 System.out.print("\n");
@@ -112,10 +116,10 @@ public class Main {
 
             // Check collision with Food, Tail, Wall
             // If Tail or Wall -> Game over
-            if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 || currentHeadY == boardSize || board[currentHeadX][currentHeadY] == 2) {
+            if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 || currentHeadY == boardSize || board[currentHeadX][currentHeadY] == BoardElement.SNAKE_BODY) {
                 System.out.println("GAME OVER");
                 break;
-            } else if (board[currentHeadX][currentHeadY] == 3) {
+            } else if (board[currentHeadX][currentHeadY] == BoardElement.FOOD) {
 
                 // If Food increase snake by one, Spawn new food
                 snakeX = Arrays.copyOf(snakeX, snakeX.length + 1);
@@ -142,24 +146,25 @@ public class Main {
                     }
                 }
 
-                while (board[randomX][randomY] != 0) {
+                // TODO : Put the food spawning in a method.
+                while (board[randomX][randomY] != BoardElement.EMPTY) {
                     randomX = random.nextInt(boardSize);
                     randomY = random.nextInt(boardSize);
                 }
 
-                board[randomX][randomY] = 3;
+                board[randomX][randomY] = BoardElement.FOOD;
             } else {
-                board[snakeX[snakeX.length - 1]][snakeY[snakeX.length - 1]] = 0;
+                board[snakeX[snakeX.length - 1]][snakeY[snakeX.length - 1]] = BoardElement.EMPTY;
             }
             // Move the snake
             for (int i = snakeX.length - 1; i >= 1; i--) {
                 snakeX[i] = snakeX[i - 1];
                 snakeY[i] = snakeY[i - 1];
-                board[snakeX[i]][snakeY[i]] = 2;
+                board[snakeX[i]][snakeY[i]] = BoardElement.SNAKE_BODY;
             }
             snakeX[0] = currentHeadX;
             snakeY[0] = currentHeadY;
-            board[snakeX[0]][snakeY[0]] = 1;
+            board[snakeX[0]][snakeY[0]] = BoardElement.SNAKE_HEAD;
         }
     }
 }
