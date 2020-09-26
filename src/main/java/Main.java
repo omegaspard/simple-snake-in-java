@@ -21,12 +21,13 @@ public class Main {
         int currentHeadX = 4;
         int currentHeadY = 4;
 
+        // TODO: The snake should be in an object to hide the implementation ?
         ElementPosition[] snake = {
                 new ElementPosition(currentHeadX, currentHeadY),
                 new ElementPosition(currentHeadX, currentHeadY - 1)
         };
 
-        board[snake[0].getX()][snake[0].getX()] = BoardElement.SNAKE_HEAD;
+        board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
         board[snake[1].getX()][snake[1].getY()] = BoardElement.SNAKE_BODY;
 
         // TODO: The position of the head can be calculated therefore this one is useless
@@ -45,6 +46,8 @@ public class Main {
         }
 
         board[randomX][randomY] = BoardElement.FOOD;
+
+        // TODO: Put the movement management in a method/object
 
         Map<String, String> inverseMovement = new HashMap<>();
         inverseMovement.put("z", "s");
@@ -77,8 +80,6 @@ public class Main {
                 System.out.print("\n");
             }
 
-            // TODO: Put the movement management in a method/object
-            // TODO: Use enum to name the different movement.
             // Movement listener (In terminal mode)
             Scanner scanner = new Scanner(System.in);
             HashSet<String> availableMovements = new HashSet<>(Arrays.asList("z", "q", "s", "d"));
@@ -91,7 +92,7 @@ public class Main {
             while (!availableMovements.contains(movement) &&
                     !movement.equals(inverseMovement.getOrDefault(previousMovement, "a")));
 
-            switch (Movement.getEnum(movement)) {
+            switch (Movement.fromString(movement)) {
                 case UP:
                     currentHeadX -= 1;
                     break;
@@ -150,6 +151,8 @@ public class Main {
             } else {
                 board[snake[snake.length - 1].getX()][snake[snake.length - 1].getY()] = BoardElement.EMPTY;
             }
+
+            // TODO Put the snake Movement in a method/
             // Move the snake
             for (int i = snake.length - 1; i >= 1; i--) {
                 snake[i] = new ElementPosition(snake[i - 1].getX(), snake[i - 1].getY());

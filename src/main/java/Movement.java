@@ -1,17 +1,7 @@
 public enum Movement {
-    UP("z"), DOWN("s"), LEFT("q"), RIGHT("d");
+    UP, DOWN, LEFT, RIGHT;
 
-    private final String value;
-
-    private Movement(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return this.value;
-    }
-
-    public static Movement getEnum(String value) {
+    public static Movement fromString(String value) {
         switch (value) {
             case "z":
                 return UP;
