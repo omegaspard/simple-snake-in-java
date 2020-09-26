@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int boardSize = 10;
+        int boardSize = 5;
 
         // Create the board
         BoardElement[][] board = new BoardElement[boardSize][boardSize];
@@ -15,27 +15,21 @@ public class Main {
                 board[i][j] = BoardElement.EMPTY;
             }
         }
-
+q
         // Create the snake
-        // TODO: The snake could be represented by a single array of Pair object (x, y).
-        // TODO: The element of the board could be represented by an Enum instead of an int.
-        Integer[] snakeX = new Integer[2];
-        Integer[] snakeY = new Integer[2];
-
         // Put the snake in the board
         int currentHeadX = 4;
         int currentHeadY = 4;
-        int currentTailX = 4;
-        int currentTailY = currentHeadX - 1;
 
-        snakeX[0] = currentHeadX;
-        snakeY[0] = currentHeadY;
-        snakeX[1] = currentHeadX;
-        snakeY[1] = currentHeadY - 1;
+        ElementPosition[] snake = {
+                new ElementPosition(currentHeadX, currentHeadY),
+                new ElementPosition(currentHeadX, currentHeadY - 1)
+        };
 
-        board[snakeX[0]][snakeY[0]] = BoardElement.SNAKE_HEAD;
-        board[snakeX[1]][snakeY[1]] = BoardElement.SNAKE_BODY;
+        board[snake[0].getX()][snake[0].getX()] = BoardElement.SNAKE_HEAD;
+        board[snake[1].getX()][snake[1].getY()] = BoardElement.SNAKE_BODY;
 
+        // TODO: The position of the head can be calculated therefore this one is useless
         String previousMovement = "d";
 
         // Generate random number to put the first food
@@ -52,7 +46,7 @@ public class Main {
 
         board[randomX][randomY] = BoardElement.FOOD;
 
-        Map<String, String> inverseMovement = new HashMap();
+        Map<String, String> inverseMovement = new HashMap<>();
         inverseMovement.put("z", "s");
         inverseMovement.put("s", "z");
         inverseMovement.put("q", "d");
@@ -83,7 +77,9 @@ public class Main {
                 System.out.print("\n");
             }
 
-            // Movmement listener (In terminal mode)
+            // TODO: Put the movement management in a method/object
+            // TODO: Use enum to name the different movement.
+            // Movement listener (In terminal mode)
             Scanner scanner = new Scanner(System.in);
             HashSet<String> availableMovements = new HashSet<>(Arrays.asList("z", "q", "s", "d"));
             String movement;
@@ -92,10 +88,8 @@ public class Main {
                 System.out.println("Enter movement (z, q, s, d): ");
                 movement = scanner.nextLine();
             }
-            while (!availableMovements.contains(movement) && !movement.equals(inverseMovement.getOrDefault(previousMovement, "a")));
-
-            int previousHeadX = currentHeadX;
-            int previousHeadY = currentHeadY;
+            while (!availableMovements.contains(movement) &&
+                    !movement.equals(inverseMovement.getOrDefault(previousMovement, "a")));
 
             switch (movement) {
                 case "z":
@@ -116,33 +110,31 @@ public class Main {
 
             // Check collision with Food, Tail, Wall
             // If Tail or Wall -> Game over
-            if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 || currentHeadY == boardSize || board[currentHeadX][currentHeadY] == BoardElement.SNAKE_BODY) {
+            if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 ||
+                    currentHeadY == boardSize || board[currentHeadX][currentHeadY] == BoardElement.SNAKE_BODY) {
                 System.out.println("GAME OVER");
                 break;
             } else if (board[currentHeadX][currentHeadY] == BoardElement.FOOD) {
 
-                // If Food increase snake by one, Spawn new food
-                snakeX = Arrays.copyOf(snakeX, snakeX.length + 1);
-                snakeY = Arrays.copyOf(snakeY, snakeY.length + 1);
+                // If Food, increase snake by one, Spawn new food
+                // TODO: Should the snake be an array list ?
+                snake = Arrays.copyOf(snake, snake.length + 1);
 
-                int directionTailX = snakeX[snakeX.length - 3] - snakeX[snakeX.length - 2];
-                if(directionTailX > 0) {
-                    snakeX[snakeX.length - 1] = snakeX[snakeX.length - 2] - 1;
-                    snakeY[snakeY.length - 1] = snakeY[snakeY.length - 2];
-                }
-                else if(directionTailX < 0) {
-                    snakeX[snakeX.length - 1] = snakeX[snakeX.length - 2] + 1;
-                    snakeY[snakeY.length - 1] = snakeY[snakeY.length - 2];
-                }
-                else {
-                    int directionTailY = snakeY[snakeY.length - 3] - snakeY[snakeY.length - 2];
-                    if(directionTailY > 0) {
-                        snakeX[snakeX.length - 1] = snakeX[snakeX.length - 2];
-                        snakeY[snakeY.length - 1] = snakeY[snakeY.length - 2] + 1;
-                    }
-                    else if(directionTailY < 0) {
-                        snakeX[snakeX.length - 1] = snakeX[snakeX.length - 2];
-                        snakeY[snakeY.length - 1] = snakeY[snakeY.length - 2] - 1;
+                int directionTailX = snake[snake.length - 3].getX() - snake[snake.length - 2].getX();
+                if (directionTailX > 0) {
+                    snake[snake.length - 1] =
+                            new ElementPosition(snake[snake.length - 2].getX() - 1, snake[snake.length - 2].getY());
+                } else if (directionTailX < 0) {
+                    snake[snake.length - 1] =
+                            new ElementPosition(snake[snake.length - 2].getX() + 1, snake[snake.length - 2].getY());
+                } else {
+                    int directionTailY = snake[snake.length - 3].getY() - snake[snake.length - 2].getY();
+                    if (directionTailY > 0) {
+                        snake[snake.length - 1] =
+                                new ElementPosition(snake[snake.length - 2].getX(), snake[snake.length - 2].getY() + 1);
+                    } else if (directionTailY < 0) {
+                        snake[snake.length - 1] =
+                                new ElementPosition(snake[snake.length - 2].getX(), snake[snake.length - 2].getY() - 1);
                     }
                 }
 
@@ -154,17 +146,15 @@ public class Main {
 
                 board[randomX][randomY] = BoardElement.FOOD;
             } else {
-                board[snakeX[snakeX.length - 1]][snakeY[snakeX.length - 1]] = BoardElement.EMPTY;
+                board[snake[snake.length - 1].getX()][snake[snake.length - 1].getY()] = BoardElement.EMPTY;
             }
             // Move the snake
-            for (int i = snakeX.length - 1; i >= 1; i--) {
-                snakeX[i] = snakeX[i - 1];
-                snakeY[i] = snakeY[i - 1];
-                board[snakeX[i]][snakeY[i]] = BoardElement.SNAKE_BODY;
+            for (int i = snake.length - 1; i >= 1; i--) {
+                snake[i] = new ElementPosition(snake[i - 1].getX(), snake[i - 1].getY());
+                board[snake[i].getX()][snake[i].getY()] = BoardElement.SNAKE_BODY;
             }
-            snakeX[0] = currentHeadX;
-            snakeY[0] = currentHeadY;
-            board[snakeX[0]][snakeY[0]] = BoardElement.SNAKE_HEAD;
+            snake[0] = new ElementPosition(currentHeadX, currentHeadY);
+            board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
         }
     }
 }
