@@ -15,7 +15,7 @@ public class Main {
                 board[i][j] = BoardElement.EMPTY;
             }
         }
-q
+
         // Create the snake
         // Put the snake in the board
         int currentHeadX = 4;
@@ -91,17 +91,17 @@ q
             while (!availableMovements.contains(movement) &&
                     !movement.equals(inverseMovement.getOrDefault(previousMovement, "a")));
 
-            switch (movement) {
-                case "z":
+            switch (Movement.getEnum(movement)) {
+                case UP:
                     currentHeadX -= 1;
                     break;
-                case "s":
+                case DOWN:
                     currentHeadX += 1;
                     break;
-                case "d":
+                case RIGHT:
                     currentHeadY += 1;
                     break;
-                case "q":
+                case LEFT:
                     currentHeadY -= 1;
                     break;
                 default:
@@ -131,10 +131,12 @@ q
                     int directionTailY = snake[snake.length - 3].getY() - snake[snake.length - 2].getY();
                     if (directionTailY > 0) {
                         snake[snake.length - 1] =
-                                new ElementPosition(snake[snake.length - 2].getX(), snake[snake.length - 2].getY() + 1);
+                                new ElementPosition(snake[snake.length - 2].getX(),
+                                        snake[snake.length - 2].getY() + 1);
                     } else if (directionTailY < 0) {
                         snake[snake.length - 1] =
-                                new ElementPosition(snake[snake.length - 2].getX(), snake[snake.length - 2].getY() - 1);
+                                new ElementPosition(snake[snake.length - 2].getX(),
+                                        snake[snake.length - 2].getY() - 1);
                     }
                 }
 
