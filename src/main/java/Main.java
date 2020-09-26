@@ -4,13 +4,15 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int boardSize = 10;
+
         // Create the board
-        Integer[][] board = new Integer[10][10];
+        Integer[][] board = new Integer[boardSize][boardSize];
 
         // Fill the board with 0
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 board[i][j] = 0;
             }
         }
@@ -38,12 +40,12 @@ public class Main {
         // Generate random number to put the first food
         Random random = new Random();
 
-        int randomX = random.nextInt(10);
-        int randomY = random.nextInt(10);
+        int randomX = random.nextInt(boardSize);
+        int randomY = random.nextInt(boardSize);
 
         while (board[randomX][randomY] != 0) {
-            randomX = random.nextInt(10);
-            randomY = random.nextInt(10);
+            randomX = random.nextInt(boardSize);
+            randomY = random.nextInt(boardSize);
         }
 
         board[randomX][randomY] = 3;
@@ -57,8 +59,8 @@ public class Main {
         // While loop that run the game
         // Draw the board
         while (true) {
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++) {
+            for (int i = 0; i < boardSize; i++) {
+                for (int j = 0; j < boardSize; j++) {
                     switch (board[i][j]) {
                         case 0:
                             System.out.print("[ ]");
@@ -110,7 +112,7 @@ public class Main {
 
             // Check collision with Food, Tail, Wall
             // If Tail or Wall -> Game over
-            if (currentHeadX == -1 || currentHeadX == 10 || currentHeadY == -1 || currentHeadY == 10 || board[currentHeadX][currentHeadY] == 2) {
+            if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 || currentHeadY == boardSize || board[currentHeadX][currentHeadY] == 2) {
                 System.out.println("GAME OVER");
                 break;
             } else if (board[currentHeadX][currentHeadY] == 3) {
@@ -141,8 +143,8 @@ public class Main {
                 }
 
                 while (board[randomX][randomY] != 0) {
-                    randomX = random.nextInt(10);
-                    randomY = random.nextInt(10);
+                    randomX = random.nextInt(boardSize);
+                    randomY = random.nextInt(boardSize);
                 }
 
                 board[randomX][randomY] = 3;
