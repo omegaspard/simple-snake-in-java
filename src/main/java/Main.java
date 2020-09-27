@@ -14,6 +14,15 @@ public class Main {
             Arrays.fill(row, BoardElement.EMPTY);
         }
 
+        // All the position combination to compute only once
+        HashSet<ElementPosition> boardElementPositions = new HashSet<>();
+
+        for(int i =0; i < boardSize; i++) {
+            for(int j = 0; j < boardSize; j++) {
+                boardElementPositions.add(new ElementPosition(i, j));
+            }
+        }
+
         // Create the snake
         // Put the snake in the board
         int currentHeadX = 4;
@@ -28,22 +37,14 @@ public class Main {
         board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
         board[snake[1].getX()][snake[1].getY()] = BoardElement.SNAKE_BODY;
 
-        // TODO: The position of the head can be calculated therefore this one is useless
+        // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all and keeping the track of the head position from the original movement is simplier ?
         String previousMovement = "d";
 
-        // Generate random number to put the first food
-        // TODO: The available position could be put in a Set and we make a random on an index of this Set.
+        // Seed to create only once so to pass as an argument.
         Random random = new Random();
 
-        int randomX = random.nextInt(boardSize);
-        int randomY = random.nextInt(boardSize);
-
-        while (board[randomX][randomY] != BoardElement.EMPTY) {
-            randomX = random.nextInt(boardSize);
-            randomY = random.nextInt(boardSize);
-        }
-
-        board[randomX][randomY] = BoardElement.FOOD;
+        ElementPosition randomPosition = getRandomElementPosition(boardSize, boardElementPositions, snake, random);
+        board[randomPosition.getX()][randomPosition.getY()] = BoardElement.FOOD;
 
         // TODO: Put the movement management in a method/object
 
@@ -138,14 +139,8 @@ public class Main {
                                         snake[snake.length - 2].getY() - 1);
                     }
                 }
-
-                // TODO : Put the food spawning in a method.
-                while (board[randomX][randomY] != BoardElement.EMPTY) {
-                    randomX = random.nextInt(boardSize);
-                    randomY = random.nextInt(boardSize);
-                }
-
-                board[randomX][randomY] = BoardElement.FOOD;
+                randomPosition = getRandomElementPosition(boardSize, boardElementPositions, snake, random);
+                board[randomPosition.getX()][randomPosition.getX()] = BoardElement.FOOD;
             } else {
                 board[snake[snake.length - 1].getX()][snake[snake.length - 1].getY()] = BoardElement.EMPTY;
             }
@@ -159,5 +154,16 @@ public class Main {
             snake[0] = new ElementPosition(currentHeadX, currentHeadY);
             board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
         }
+    }
+
+    private static ElementPosition getRandomElementPosition(int boardSize,
+                                                            HashSet<ElementPosition> boardElementPositions,
+                                                            ElementPosition[] snake, Random random) {
+        HashSet<ElementPosition> snakeBodyPositions = new HashSet<>(Arrays.asList(snake));
+        HashSet<ElementPosition> availableBoardPositions = new HashSet<>(boardElementPositions);
+        availableBoardPositions.removeAll(snakeBodyPositions);
+        ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(availableBoardPositions);
+
+        return indexedAvailableBoardPositions.get(random.nextInt(boardSize));
     }
 }
