@@ -9,11 +9,9 @@ public class Main {
         // Create the board
         BoardElement[][] board = new BoardElement[boardSize][boardSize];
 
-        // Fill the board with 0
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                board[i][j] = BoardElement.EMPTY;
-            }
+        // Fill the board with empty element.
+        for(BoardElement[] row : board) {
+            Arrays.fill(row, BoardElement.EMPTY);
         }
 
         // Create the snake
