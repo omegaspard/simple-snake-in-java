@@ -10,24 +10,22 @@ public class Main {
         SnakeBoard snakeBoard = SnakeBoard.create(boardSize);
 
         // Create the snake
+        Snake snake = Snake.create(boardSize);
+
+        // TODO To transfer when managing the movement in an object.
+        int currentHeadX = snake.getHead().getX();
+        int currentHeadY = snake.getHead().getY();
+
         // Put the snake in the board
-        int currentHeadX = 4;
-        int currentHeadY = 4;
 
-        // TODO: The snake should be in an object to hide the implementation ?
-        ElementPosition[] snake = {
-                new ElementPosition(currentHeadX, currentHeadY),
-                new ElementPosition(currentHeadX, currentHeadY - 1)
-        };
-
-        snakeBoard.putElement(snake[0], BoardElement.SNAKE_HEAD);
-        snakeBoard.putElement(snake[1], BoardElement.SNAKE_BODY);
+        snakeBoard.putElement(snake.getHead(), BoardElement.SNAKE_HEAD);
+        snakeBoard.putElement(snake.getTail(), BoardElement.SNAKE_BODY);
 
         // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all
-        //  and keeping the track of the head position from the original movement is simplier ?
+        //  and keeping the track of the head position from the original movement is simpler ?
         String previousMovement = "d";
 
-        snakeBoard.putFood(snake);
+        snakeBoard.putFood(snake.getAllSnakePositions());
 
         // TODO: Put the movement management in a method/object
 
@@ -37,6 +35,7 @@ public class Main {
         inverseMovement.put("q", "d");
         inverseMovement.put("d", "q");
 
+        // TODO: Put the drawing in an object
         // While loop that run the game
         // Draw the board
         while (true) {
@@ -100,45 +99,18 @@ public class Main {
             } else if (snakeBoard.getBoardElementAt(new ElementPosition(currentHeadX, currentHeadY))
                     == BoardElement.FOOD) {
 
-                // If Food, increase snake by one, Spawn new food
-                // TODO: Should the snake be an array list ?
-                snake = Arrays.copyOf(snake, snake.length + 1);
+                snake.eatFood();
 
-                int directionTailX = snake[snake.length - 3].getX() - snake[snake.length - 2].getX();
-                if (directionTailX > 0) {
-                    snake[snake.length - 1] =
-                            new ElementPosition(snake[snake.length - 2].getX() - 1, snake[snake.length - 2].getY());
-                } else if (directionTailX < 0) {
-                    snake[snake.length - 1] =
-                            new ElementPosition(snake[snake.length - 2].getX() + 1, snake[snake.length - 2].getY());
-                } else {
-                    int directionTailY = snake[snake.length - 3].getY() - snake[snake.length - 2].getY();
-                    if (directionTailY > 0) {
-                        snake[snake.length - 1] =
-                                new ElementPosition(snake[snake.length - 2].getX(),
-                                        snake[snake.length - 2].getY() + 1);
-                    } else if (directionTailY < 0) {
-                        snake[snake.length - 1] =
-                                new ElementPosition(snake[snake.length - 2].getX(),
-                                        snake[snake.length - 2].getY() - 1);
-                    }
-                }
-                if(!snakeBoard.putFood(snake)) {
+                if(!snakeBoard.putFood(snake.getAllSnakePositions())) {
                     System.out.println("GAME WON ! CONGRATS !");
                     break;
                 }
-            } else {
-                snakeBoard.putElement(snake[snake.length - 1], BoardElement.EMPTY);
             }
 
-            // TODO Put the snake Movement in a method, to add in a snake object ?
             // Move the snake
-            for (int i = snake.length - 1; i >= 1; i--) {
-                snake[i] = new ElementPosition(snake[i - 1].getX(), snake[i - 1].getY());
-                snakeBoard.putElement(snake[i], BoardElement.SNAKE_BODY);
-            }
-            snake[0] = new ElementPosition(currentHeadX, currentHeadY);
-            snakeBoard.putElement(snake[0], BoardElement.SNAKE_HEAD);
+            snakeBoard.cleanSnake();
+            snake.moveForward(currentHeadX, currentHeadY);
+            snakeBoard.putElements(snake.getBody(), snake.getBodyBoardElement());
         }
     }
 }
