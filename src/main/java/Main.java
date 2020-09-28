@@ -7,21 +7,7 @@ public class Main {
         int boardSize = 5;
 
         // Create the board
-        BoardElement[][] board = new BoardElement[boardSize][boardSize];
-
-        // Fill the board with empty element.
-        for(BoardElement[] row : board) {
-            Arrays.fill(row, BoardElement.EMPTY);
-        }
-
-        // All the position combination to compute only once
-        HashSet<ElementPosition> boardElementPositions = new HashSet<>();
-
-        for(int i =0; i < boardSize; i++) {
-            for(int j = 0; j < boardSize; j++) {
-                boardElementPositions.add(new ElementPosition(i, j));
-            }
-        }
+        SnakeBoard snakeBoard = SnakeBoard.create(boardSize);
 
         // Create the snake
         // Put the snake in the board
@@ -34,17 +20,13 @@ public class Main {
                 new ElementPosition(currentHeadX, currentHeadY - 1)
         };
 
-        board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
-        board[snake[1].getX()][snake[1].getY()] = BoardElement.SNAKE_BODY;
+        snakeBoard.putElement(snake[0], BoardElement.SNAKE_HEAD);
+        snakeBoard.putElement(snake[1], BoardElement.SNAKE_BODY);
 
         // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all and keeping the track of the head position from the original movement is simplier ?
         String previousMovement = "d";
 
-        // Seed to create only once so to pass as an argument.
-        Random random = new Random();
-
-        ElementPosition randomPosition = getRandomElementPosition(boardSize, boardElementPositions, snake, random);
-        board[randomPosition.getX()][randomPosition.getY()] = BoardElement.FOOD;
+        snakeBoard.putFood(snake);
 
         // TODO: Put the movement management in a method/object
 
@@ -59,7 +41,7 @@ public class Main {
         while (true) {
             for (int i = 0; i < boardSize; i++) {
                 for (int j = 0; j < boardSize; j++) {
-                    switch (board[i][j]) {
+                    switch (snakeBoard.getBoardElementAt(new ElementPosition(i, j))) {
                         case EMPTY:
                             System.out.print("[ ]");
                             break;
@@ -72,8 +54,6 @@ public class Main {
                         case FOOD:
                             System.out.print("[#]");
                             break;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + board[i][j]);
                     }
                 }
                 System.out.print("\n");
@@ -111,10 +91,13 @@ public class Main {
             // Check collision with Food, Tail, Wall
             // If Tail or Wall -> Game over
             if (currentHeadX == -1 || currentHeadX == boardSize || currentHeadY == -1 ||
-                    currentHeadY == boardSize || board[currentHeadX][currentHeadY] == BoardElement.SNAKE_BODY) {
+                    currentHeadY == boardSize ||
+                    snakeBoard.getBoardElementAt(new ElementPosition(currentHeadX, currentHeadY))
+                            == BoardElement.SNAKE_BODY) {
                 System.out.println("GAME OVER");
                 break;
-            } else if (board[currentHeadX][currentHeadY] == BoardElement.FOOD) {
+            } else if (snakeBoard.getBoardElementAt(new ElementPosition(currentHeadX, currentHeadY))
+                    == BoardElement.FOOD) {
 
                 // If Food, increase snake by one, Spawn new food
                 // TODO: Should the snake be an array list ?
@@ -139,31 +122,21 @@ public class Main {
                                         snake[snake.length - 2].getY() - 1);
                     }
                 }
-                randomPosition = getRandomElementPosition(boardSize, boardElementPositions, snake, random);
-                board[randomPosition.getX()][randomPosition.getX()] = BoardElement.FOOD;
+                if(!snakeBoard.putFood(snake)) {
+                    System.out.println("GAME WON ! CONGRATS !");
+                }
             } else {
-                board[snake[snake.length - 1].getX()][snake[snake.length - 1].getY()] = BoardElement.EMPTY;
+                snakeBoard.putElement(snake[snake.length - 1], BoardElement.EMPTY);
             }
 
-            // TODO Put the snake Movement in a method/
+            // TODO Put the snake Movement in a method, to add in a snake object ?
             // Move the snake
             for (int i = snake.length - 1; i >= 1; i--) {
                 snake[i] = new ElementPosition(snake[i - 1].getX(), snake[i - 1].getY());
-                board[snake[i].getX()][snake[i].getY()] = BoardElement.SNAKE_BODY;
+                snakeBoard.putElement(snake[i], BoardElement.SNAKE_BODY);
             }
             snake[0] = new ElementPosition(currentHeadX, currentHeadY);
-            board[snake[0].getX()][snake[0].getY()] = BoardElement.SNAKE_HEAD;
+            snakeBoard.putElement(snake[0], BoardElement.SNAKE_HEAD);
         }
-    }
-
-    private static ElementPosition getRandomElementPosition(int boardSize,
-                                                            HashSet<ElementPosition> boardElementPositions,
-                                                            ElementPosition[] snake, Random random) {
-        HashSet<ElementPosition> snakeBodyPositions = new HashSet<>(Arrays.asList(snake));
-        HashSet<ElementPosition> availableBoardPositions = new HashSet<>(boardElementPositions);
-        availableBoardPositions.removeAll(snakeBodyPositions);
-        ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(availableBoardPositions);
-
-        return indexedAvailableBoardPositions.get(random.nextInt(boardSize));
     }
 }

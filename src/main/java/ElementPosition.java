@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class ElementPosition {
     private final int x;
     private final int y;
@@ -13,5 +15,19 @@ public class ElementPosition {
 
     public int getY() {
         return y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElementPosition that = (ElementPosition) o;
+        return getX() == that.getX() &&
+                getY() == that.getY();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }
