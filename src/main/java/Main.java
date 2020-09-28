@@ -23,7 +23,8 @@ public class Main {
         snakeBoard.putElement(snake[0], BoardElement.SNAKE_HEAD);
         snakeBoard.putElement(snake[1], BoardElement.SNAKE_BODY);
 
-        // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all and keeping the track of the head position from the original movement is simplier ?
+        // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all
+        //  and keeping the track of the head position from the original movement is simplier ?
         String previousMovement = "d";
 
         snakeBoard.putFood(snake);
@@ -124,6 +125,7 @@ public class Main {
                 }
                 if(!snakeBoard.putFood(snake)) {
                     System.out.println("GAME WON ! CONGRATS !");
+                    break;
                 }
             } else {
                 snakeBoard.putElement(snake[snake.length - 1], BoardElement.EMPTY);

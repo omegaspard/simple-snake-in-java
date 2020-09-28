@@ -1,36 +1,34 @@
 import java.util.*;
-import java.util.function.Function;
 
 public class SnakeBoard {
     private final int boardSize;
     private final BoardElement[][] board;
-    private final Function<Integer, Set<ElementPosition>> allPositions = (Integer size) -> {
-        HashSet<ElementPosition> boardElementPositions = new HashSet<>();
-
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                boardElementPositions.add(new ElementPosition(i, j));
-            }
-        }
-
-        return boardElementPositions;
-    };
+    private final Set<ElementPosition> allPositions;
     private final Random random = new Random();
+    private ElementPosition lastFoodPosition;
 
-    private SnakeBoard(int boardSize, BoardElement[][] board) {
+    private SnakeBoard(int boardSize, BoardElement[][] board, Set<ElementPosition> allPositions) {
         this.boardSize = boardSize;
         this.board = board;
+        this.allPositions = allPositions;
     }
 
     public static SnakeBoard create(int boardSize) {
         BoardElement[][] board = new BoardElement[boardSize][boardSize];
 
-        // Fill the board with empty element.
         for(BoardElement[] row : board) {
             Arrays.fill(row, BoardElement.EMPTY);
         }
 
-        return new SnakeBoard(boardSize, board);
+        HashSet<ElementPosition> boardElementPositions = new HashSet<>();
+
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                boardElementPositions.add(new ElementPosition(i, j));
+            }
+        }
+
+        return new SnakeBoard(boardSize, board, Collections.unmodifiableSet(boardElementPositions));
     }
 
     public int getBoardSize() {
@@ -45,23 +43,26 @@ public class SnakeBoard {
         return this.board[elementPosition.getX()][elementPosition.getY()];
     }
 
-    // TODO: When putting a new food, the current food location need to be taken into consideration.
     public boolean putFood(ElementPosition[] snake) {
         Set<ElementPosition> snakeBodyPositions = new HashSet<>(Arrays.asList(snake));
-        Set<ElementPosition> availableBoardPositions = this.allPositions.apply(this.boardSize);
+        Set<ElementPosition> currentAvailableBoardPositions = new HashSet<>(this.allPositions);
 
-        if(availableBoardPositions.isEmpty()) {
+        if(currentAvailableBoardPositions.isEmpty()) {
             return false;
         }
 
-        availableBoardPositions.removeAll(snakeBodyPositions);
-        ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(availableBoardPositions);
+        currentAvailableBoardPositions.removeAll(snakeBodyPositions);
+        if(lastFoodPosition != null) {
+            currentAvailableBoardPositions.remove(this.lastFoodPosition);
+        }
+        ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(currentAvailableBoardPositions);
 
         ElementPosition randomElementPosition = indexedAvailableBoardPositions.get(random.nextInt(boardSize));
+
+        this.lastFoodPosition = randomElementPosition;
 
         this.board[randomElementPosition.getX()][randomElementPosition.getY()] = BoardElement.FOOD;
 
         return true;
     }
-
 }
