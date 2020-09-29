@@ -12,7 +12,7 @@ public enum Movement {
             case "d":
                 return RIGHT;
             default:
-                throw new IllegalArgumentException("Argument can only be one of the values of the Movement Enum.");
+                throw new IllegalArgumentException("Argument can only be one of z q s or d.");
         }
     }
 

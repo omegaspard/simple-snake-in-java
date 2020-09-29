@@ -63,6 +63,7 @@ public class SnakeBoard {
         currentAvailableBoardPositions.removeAll(snakeBodyPositions);
         if (lastFoodPosition != null) currentAvailableBoardPositions.remove(this.lastFoodPosition);
         ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(currentAvailableBoardPositions);
+        // TODO fix bug when only 2 cases remains.
         ElementPosition randomElementPosition = indexedAvailableBoardPositions.get(random.nextInt(boardSize));
 
         this.lastFoodPosition = randomElementPosition;

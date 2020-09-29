@@ -18,8 +18,8 @@ public class SnakeMovementManager {
             System.out.println("Enter movement (z, q, s, d): ");
             movement = scanner.nextLine();
         }
-        while (!availableInputs.contains(movement) &&
-                !Movement.fromString(movement).equals(inverseMovement.get(headDirection)));
+        while (!availableInputs.contains(movement) ||
+                Movement.fromString(movement).equals(inverseMovement.get(headDirection)));
 
         switch (Movement.fromString(movement)) {
             case UP:
@@ -31,7 +31,7 @@ public class SnakeMovementManager {
             case LEFT:
                 return new ElementPosition(0, -1);
             default:
-                throw new IllegalStateException("Unexpected value: " + Movement.fromString(movement));
+                throw new IllegalStateException("Unexpected value: " + movement);
         }
     }
 
