@@ -12,14 +12,10 @@ public class Main {
         // Create the snake
         Snake snake = Snake.create(boardSize);
 
-        // TODO To transfer when managing the movement in an object.
-        int currentHeadX = snake.getHead().getX();
-        int currentHeadY = snake.getHead().getY();
-
         // Put the snake in the board
 
-        snakeBoard.putElement(snake.getHead(), BoardElement.SNAKE_HEAD);
-        snakeBoard.putElement(snake.getTail(), BoardElement.SNAKE_BODY);
+        snakeBoard.putElement(snake.getHead().getElementPosition(), BoardElement.SNAKE_HEAD);
+        snakeBoard.putElement(snake.getTail().getElementPosition(), BoardElement.SNAKE_BODY);
 
         // TODO: The position of the head can be calculated therefore this one is useless or it is not useless at all
         //  and keeping the track of the head position from the original movement is simpler ?
@@ -71,6 +67,11 @@ public class Main {
             while (!availableMovements.contains(movement) &&
                     !movement.equals(inverseMovement.getOrDefault(previousMovement, "a")));
 
+
+            // TODO To transfer when managing the movement in an object.
+            int currentHeadX = snake.getHead().getElementPosition().getX();
+            int currentHeadY = snake.getHead().getElementPosition().getY();
+
             switch (Movement.fromString(movement)) {
                 case UP:
                     currentHeadX -= 1;
@@ -110,7 +111,7 @@ public class Main {
             // Move the snake
             snakeBoard.cleanSnake();
             snake.moveForward(currentHeadX, currentHeadY);
-            snakeBoard.putElements(snake.getBody(), snake.getBodyBoardElement());
+            snakeBoard.putElements(snake.getBody());
         }
     }
 }

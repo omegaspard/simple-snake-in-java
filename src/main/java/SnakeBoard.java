@@ -17,7 +17,7 @@ public class SnakeBoard {
     public static SnakeBoard create(int boardSize) {
         BoardElement[][] board = new BoardElement[boardSize][boardSize];
 
-        for(BoardElement[] row : board) {
+        for (BoardElement[] row : board) {
             Arrays.fill(row, BoardElement.EMPTY);
         }
 
@@ -36,16 +36,9 @@ public class SnakeBoard {
         this.board[elementPosition.getX()][elementPosition.getY()] = boardElement;
     }
 
-    public void putElements(List<ElementPosition> elements, List<BoardElement> boardElements) {
-        if(elements.size() != boardElements.size()) {
-            throw new IllegalArgumentException("The list of element doesn't match the corresponding" +
-                    " list of its type of board elements.");
-        }
-        Iterator<ElementPosition> elementPositionIterator = elements.iterator();
-        Iterator<BoardElement> boardElementIterator = boardElements.iterator();
-
-        while (elementPositionIterator.hasNext() && boardElementIterator.hasNext()) {
-            putElement(elementPositionIterator.next(), boardElementIterator.next());
+    public void putElements(List<SnakePart> snakeParts) {
+        for (SnakePart snakePart : snakeParts) {
+            putElement(snakePart.getElementPosition(), snakePart.getBoardElement());
         }
     }
 
@@ -56,12 +49,12 @@ public class SnakeBoard {
     public boolean putFood(Set<ElementPosition> snakeBodyPositions) {
         Set<ElementPosition> currentAvailableBoardPositions = new HashSet<>(this.allPositions);
 
-        if(currentAvailableBoardPositions.isEmpty()) {
+        if (currentAvailableBoardPositions.isEmpty()) {
             return false;
         }
 
         currentAvailableBoardPositions.removeAll(snakeBodyPositions);
-        if(lastFoodPosition != null) currentAvailableBoardPositions.remove(this.lastFoodPosition);
+        if (lastFoodPosition != null) currentAvailableBoardPositions.remove(this.lastFoodPosition);
         ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(currentAvailableBoardPositions);
         ElementPosition randomElementPosition = indexedAvailableBoardPositions.get(random.nextInt(boardSize));
 
@@ -75,7 +68,7 @@ public class SnakeBoard {
     public void cleanSnake() {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if(this.board[i][j] == BoardElement.SNAKE_HEAD || this.board[i][j] == BoardElement.SNAKE_BODY) {
+                if (this.board[i][j] == BoardElement.SNAKE_HEAD || this.board[i][j] == BoardElement.SNAKE_BODY) {
                     this.board[i][j] = BoardElement.EMPTY;
                 }
             }
