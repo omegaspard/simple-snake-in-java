@@ -3,14 +3,11 @@ import java.util.*;
 public class SnakeBoard {
     private final int boardSize;
     private final BoardElement[][] board;
-    private final Set<ElementPosition> allPositions;
     private final Random random = new Random();
-    private ElementPosition lastFoodPosition;
 
-    private SnakeBoard(int boardSize, BoardElement[][] board, Set<ElementPosition> allPositions) {
+    private SnakeBoard(int boardSize, BoardElement[][] board) {
         this.boardSize = boardSize;
         this.board = board;
-        this.allPositions = allPositions;
     }
 
     public static SnakeBoard create(int boardSize) {
@@ -20,15 +17,7 @@ public class SnakeBoard {
             Arrays.fill(row, BoardElement.EMPTY);
         }
 
-        HashSet<ElementPosition> boardElementPositions = new HashSet<>();
-
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                boardElementPositions.add(new ElementPosition(i, j));
-            }
-        }
-
-        return new SnakeBoard(boardSize, board, Collections.unmodifiableSet(boardElementPositions));
+        return new SnakeBoard(boardSize, board);
     }
 
     public int getBoardSize() {
@@ -53,21 +42,16 @@ public class SnakeBoard {
         return this.board[x][y];
     }
 
-    public boolean putFood(Set<ElementPosition> snakeBodyPositions) {
-        Set<ElementPosition> currentAvailableBoardPositions = new HashSet<>(this.allPositions);
+    public boolean putFood() {
+        Set<ElementPosition> currentAvailableBoardPositions = this.getCurrentAvailablePosition();
 
         if (currentAvailableBoardPositions.isEmpty()) {
             return false;
         }
 
-        currentAvailableBoardPositions.removeAll(snakeBodyPositions);
-        if (lastFoodPosition != null) currentAvailableBoardPositions.remove(this.lastFoodPosition);
         ArrayList<ElementPosition> indexedAvailableBoardPositions = new ArrayList<>(currentAvailableBoardPositions);
-        // TODO fix bug when only 2 cases remains.
-        ElementPosition randomElementPosition = indexedAvailableBoardPositions.get(random.nextInt(boardSize));
-
-        this.lastFoodPosition = randomElementPosition;
-
+        ElementPosition randomElementPosition =
+                indexedAvailableBoardPositions.get(random.nextInt(indexedAvailableBoardPositions.size()));
         this.board[randomElementPosition.getX()][randomElementPosition.getY()] = BoardElement.FOOD;
 
         return true;
@@ -81,5 +65,17 @@ public class SnakeBoard {
                 }
             }
         }
+    }
+
+    private Set<ElementPosition> getCurrentAvailablePosition() {
+        HashSet<ElementPosition> elementPositions = new HashSet<>();
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (this.board[i][j] == BoardElement.EMPTY) {
+                    elementPositions.add(new ElementPosition(i, j));
+                }
+            }
+        }
+        return elementPositions;
     }
 }

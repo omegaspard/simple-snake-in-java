@@ -10,7 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         String regexOnlyNumbers = "[0-9]+";
-        boolean regexMatch = false;
+        boolean regexMatch;
         int boardSize = 3;
 
         do {

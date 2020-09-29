@@ -9,13 +9,11 @@ public class SnakeGameController {
         // Put the snake in the board
         snakeBoard.putElement(snake.getHead().getElementPosition(), BoardElement.SNAKE_HEAD);
         snakeBoard.putElement(snake.getTail().getElementPosition(), BoardElement.SNAKE_BODY);
-        snakeBoard.putFood(snake.getAllSnakePositions());
+        snakeBoard.putFood();
 
         Drawer drawer = new Drawer(snakeBoard);
         SnakeMovementManager snakeMovementManager = new SnakeMovementManager();
 
-        // While loop that run the game
-        // Draw the board
         while (true) {
             drawer.drawBoard();
             ElementPosition movement = snakeMovementManager.getMovement(snake.getHeadDirection());
@@ -36,7 +34,7 @@ public class SnakeGameController {
 
                 snake.eatFood();
 
-                if(!snakeBoard.putFood(snake.getAllSnakePositions())) {
+                if(!snakeBoard.putFood()) {
                     System.out.println("GAME WON ! CONGRATS !");
                     break;
                 }
