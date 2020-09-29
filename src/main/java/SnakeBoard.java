@@ -1,4 +1,3 @@
-import javax.xml.bind.Element;
 import java.util.*;
 
 public class SnakeBoard {

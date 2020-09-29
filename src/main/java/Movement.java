@@ -15,4 +15,17 @@ public enum Movement {
                 throw new IllegalArgumentException("Argument can only be one of the values of the Movement Enum.");
         }
     }
+
+    public static Movement fromElementPosition(ElementPosition elementPosition) {
+        if (new ElementPosition(-1, 0).equals(elementPosition)) {
+            return UP;
+        } else if (new ElementPosition(1, 0).equals(elementPosition)) {
+            return DOWN;
+        } else if (new ElementPosition(0, 1).equals(elementPosition)) {
+            return RIGHT;
+        } else if (new ElementPosition(0, -1).equals(elementPosition)) {
+            return LEFT;
+        }
+        throw new IllegalStateException("Unexpected value: " + elementPosition);
+    }
 }

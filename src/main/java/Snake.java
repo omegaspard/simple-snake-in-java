@@ -5,7 +5,7 @@ public class Snake {
     private SnakePart[] body;
     private final SnakePart head;
     private final SnakePart tail;
-    private final Movement headDirection = Movement.RIGHT;
+    private Movement headDirection = Movement.RIGHT;
 
     private Snake(SnakePart[] body, SnakePart head, SnakePart tail) {
         this.body = body;
@@ -85,4 +85,11 @@ public class Snake {
         return Arrays.stream(body).map(SnakePart::getElementPosition).collect(Collectors.toSet());
     }
 
+    public Movement getHeadDirection() {
+        return this.headDirection;
+    }
+
+    public void setHeadDirection(Movement movement) {
+        this.headDirection = movement;
+    }
 }
