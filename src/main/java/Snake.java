@@ -2,7 +2,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Snake {
-    // TODO: The position of a body part of the snake and it's type are always coupled, maybe put it in an object ?
     private SnakePart[] body;
     private final SnakePart head;
     private final SnakePart tail;
@@ -58,24 +57,26 @@ public class Snake {
         int directionTailX = this.body[this.body.length - 3].getElementPosition().getX()
                 - this.body[this.body.length - 2].getElementPosition().getX();
         if (directionTailX > 0) {
-            this.body[this.body.length - 1].setElementPosition(
+            this.body[this.body.length - 1] = new SnakePart(
                     new ElementPosition(this.body[this.body.length - 2].getElementPosition().getX() - 1,
-                            this.body[this.body.length - 2].getElementPosition().getY()));
+                            this.body[this.body.length - 2].getElementPosition().getY()), BoardElement.SNAKE_BODY);
         } else if (directionTailX < 0) {
-            this.body[this.body.length - 1].setElementPosition(
+            this.body[this.body.length - 1] = new SnakePart(
                     new ElementPosition(this.body[this.body.length - 2].getElementPosition().getX() + 1,
-                            this.body[this.body.length - 2].getElementPosition().getY()));
+                            this.body[this.body.length - 2].getElementPosition().getY()), BoardElement.SNAKE_BODY);
         } else {
             int directionTailY = this.body[this.body.length - 3].getElementPosition().getY()
                     - this.body[this.body.length - 2].getElementPosition().getY();
             if (directionTailY > 0) {
-                this.body[this.body.length - 1].setElementPosition(
+                this.body[this.body.length - 1] = new SnakePart(
                         new ElementPosition(this.body[this.body.length - 2].getElementPosition().getX(),
-                                this.body[this.body.length - 2].getElementPosition().getY() + 1));
+                                this.body[this.body.length - 2].getElementPosition().getY() + 1),
+                                    BoardElement.SNAKE_BODY);
             } else if (directionTailY < 0) {
-                this.body[this.body.length - 1].setElementPosition(
+                this.body[this.body.length - 1] = new SnakePart(
                         new ElementPosition(this.body[this.body.length - 2].getElementPosition().getX(),
-                                this.body[this.body.length - 2].getElementPosition().getY() - 1));
+                                this.body[this.body.length - 2].getElementPosition().getY() - 1),
+                                    BoardElement.SNAKE_BODY);
             }
         }
     }

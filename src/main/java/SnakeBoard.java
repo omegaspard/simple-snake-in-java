@@ -32,6 +32,10 @@ public class SnakeBoard {
         return new SnakeBoard(boardSize, board, Collections.unmodifiableSet(boardElementPositions));
     }
 
+    public int getBoardSize() {
+        return boardSize;
+    }
+
     public void putElement(ElementPosition elementPosition, BoardElement boardElement) {
         this.board[elementPosition.getX()][elementPosition.getY()] = boardElement;
     }
@@ -44,6 +48,10 @@ public class SnakeBoard {
 
     public BoardElement getBoardElementAt(ElementPosition elementPosition) {
         return this.board[elementPosition.getX()][elementPosition.getY()];
+    }
+
+    public BoardElement getBoardElementAt(int x, int y) {
+        return this.board[x][y];
     }
 
     public boolean putFood(Set<ElementPosition> snakeBodyPositions) {

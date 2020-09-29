@@ -31,29 +31,12 @@ public class Main {
         inverseMovement.put("q", "d");
         inverseMovement.put("d", "q");
 
-        // TODO: Put the drawing in an object
+        Drawer drawer = new Drawer(snakeBoard);
+
         // While loop that run the game
         // Draw the board
         while (true) {
-            for (int i = 0; i < boardSize; i++) {
-                for (int j = 0; j < boardSize; j++) {
-                    switch (snakeBoard.getBoardElementAt(new ElementPosition(i, j))) {
-                        case EMPTY:
-                            System.out.print("[ ]");
-                            break;
-                        case SNAKE_HEAD:
-                            System.out.print("[*]");
-                            break;
-                        case SNAKE_BODY:
-                            System.out.print("[o]");
-                            break;
-                        case FOOD:
-                            System.out.print("[#]");
-                            break;
-                    }
-                }
-                System.out.print("\n");
-            }
+            drawer.drawBoard();
 
             // Movement listener (In terminal mode)
             Scanner scanner = new Scanner(System.in);
