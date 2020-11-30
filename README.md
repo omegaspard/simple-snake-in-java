@@ -21,7 +21,7 @@ a "Drawing interface" with different implementation like "Terminal/OpenGLGraphic
 
 So far I encountered issues with adding the openGL mode because it works differently than I expected and I coded the terminal mode without thinking about it.
 
-TODO list
+# TODO list
 
 - Add the OpenGL.
   - Since I'm stuck on this maybe try to code the whole project only with openGL first ?
