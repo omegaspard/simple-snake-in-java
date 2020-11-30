@@ -1,6 +1,8 @@
 # simple-snake-in-java
 
-The famous snake in java.
+The snake game in java.
+
+The challenge of this project would be to have a transparent wa
 
 # Motivations
 
@@ -15,11 +17,12 @@ if the code of the projet is organized around the rendering part.
 This is why I firstly code the game in terminal mode.
 
 The main challenge of this project would be to have a code that make it possible to change the rendering mode (terminal/openGL) in a transparent way, just like if we had
-a "Drawing interface" and depending of the implementation we would have the openGL rendering or the terminal mode.
+a "Drawing interface" with different implementation like "Terminal/OpenGLGraphics".
 
-So far I encounter issues with adding the openGL mode because it woks differently than I expected and I coded the terminal mode without thinking about it.
+So far I encountered issues with adding the openGL mode because it works differently than I expected and I coded the terminal mode without thinking about it.
 
 TODO list
 
 - Add the OpenGL.
   - Since I'm stuck on this maybe try to code the whole project only with openGL first ?
+- Add tests.
