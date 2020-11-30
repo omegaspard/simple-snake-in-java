@@ -2,7 +2,7 @@
 
 The snake game in java.
 
-The challenge of this project would be to have a transparent wa
+The challenge of this project would be to have a transparent way to switch between different graphical such as terminal mode, a graphical one (using OpenGL graphics) and eventually others.
 
 # Motivations
 
