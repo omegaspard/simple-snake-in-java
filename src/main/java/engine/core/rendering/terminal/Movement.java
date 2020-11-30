@@ -1,3 +1,7 @@
+package engine.core.rendering.terminal;
+
+import engine.core.game.ElementPosition;
+
 public enum Movement {
     UP, DOWN, LEFT, RIGHT;
 

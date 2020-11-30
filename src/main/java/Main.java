@@ -1,3 +1,5 @@
+import engine.core.game.SnakeGameController;
+
 import java.util.*;
 
 public class Main {

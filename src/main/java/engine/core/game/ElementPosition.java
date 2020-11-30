@@ -1,3 +1,5 @@
+package engine.core.game;
+
 import java.util.Objects;
 
 public class ElementPosition {

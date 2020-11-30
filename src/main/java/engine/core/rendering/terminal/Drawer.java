@@ -1,3 +1,7 @@
+package engine.core.rendering.terminal;
+
+import engine.core.game.board.SnakeBoard;
+
 public class Drawer {
     private final SnakeBoard snakeBoard;
 

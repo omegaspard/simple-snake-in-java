@@ -1,3 +1,9 @@
+package engine.core.game.board;
+
+import engine.core.game.BoardElement;
+import engine.core.game.ElementPosition;
+import engine.core.game.snake.SnakePart;
+
 import java.util.*;
 
 public class SnakeBoard {

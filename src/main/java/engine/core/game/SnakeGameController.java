@@ -1,3 +1,14 @@
+package engine.core.game;
+
+
+import engine.core.game.BoardElement;
+import engine.core.game.ElementPosition;
+import engine.core.game.board.SnakeBoard;
+import engine.core.game.snake.Snake;
+import engine.core.rendering.terminal.Drawer;
+import engine.core.rendering.terminal.Movement;
+import engine.core.rendering.terminal.SnakeMovementManager;
+
 public class SnakeGameController {
     public static void run(int boardSize) {
         // Create the board

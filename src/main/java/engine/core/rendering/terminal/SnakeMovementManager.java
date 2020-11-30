@@ -1,3 +1,8 @@
+package engine.core.rendering.terminal;
+
+import engine.core.game.ElementPosition;
+import engine.core.rendering.terminal.Movement;
+
 import java.util.*;
 
 public class SnakeMovementManager {

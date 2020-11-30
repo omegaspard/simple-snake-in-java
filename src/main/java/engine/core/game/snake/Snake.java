@@ -1,5 +1,15 @@
+package engine.core.game.snake;
+
+import engine.core.game.BoardElement;
+import engine.core.game.ElementPosition;
+import engine.core.rendering.terminal.Movement;
+
 import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 
 public class Snake {
     private SnakePart[] body;
